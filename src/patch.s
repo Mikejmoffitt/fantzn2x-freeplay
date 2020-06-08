@@ -25,5 +25,3 @@ LAST_ROM	:=	*
 	; 2ee46
 	; 2edf6
 	; 2ee12
-	ORG	$2339C
-	nop

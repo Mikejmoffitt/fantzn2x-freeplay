@@ -20,21 +20,54 @@ FREEPLAY macro
 	ORG	$024A1A
 	jmp	(credit_update_bypass).l
 
+; Conditionally show press start on the demo screen
+	ORG	$02EE46
+	jmp	(demo_start_prompt).l
+	ORG	$02EF76
+	jmp	(demo_start_prompt_2).l
 ; Don't print the credit count in free play
-	ORG	$24A48
-	jmp	(credit_update_draw_bypass).l
+;	ORG	$24A48
+;	jmp	(credit_update_draw_bypass).l
+
+; Press Start on the title.
+	ORG	$005766
+	jmp	(title_start_prompt).l
 
 ; -----------------------------------------------------------------------------
 	ORG	LAST_ROM
 
-credit_update_draw_bypass:
+title_start_prompt:
 	FREEPLAY
-	jmp	$24A7E
+	jmp	$00604A
 /
-	movea.w	d0, a0
-	moveq	#9, d0
-	cmp.l	a0, d0
-	jmp	$24A4E
+	move.w	(CreditCount).l, d1
+	jmp	$00576C
+
+demo_start_prompt_2:
+	FREEPLAY
+	jmp	$02EF7E
+/
+	cmpi.w	#1, d0
+	beq	.show_1p
+	jmp	$02EF7E
+.show_1p:
+	jmp	$02F2AA
+
+demo_start_prompt:
+	FREEPLAY
+	jmp	$02EF76
+/
+	move.w	(CreditCount).l, d0
+	jmp	$02EE4C
+
+;credit_update_draw_bypass:
+;	FREEPLAY
+;	jmp	$24A7E
+;/
+;	movea.w	d0, a0
+;	moveq	#9, d0
+;	cmp.l	a0, d0
+;	jmp	$24A4E
 
 credit_update_bypass:
 	move.l	d2, -(sp)
